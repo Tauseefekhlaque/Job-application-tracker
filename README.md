@@ -29,8 +29,6 @@ A full stack web app to track job applications through each stage: Applied, Inte
 
 ## How to Run the Backend
 
-## How to Run the Backend
-
 ```bash
 cd backend
 python -m venv venv
