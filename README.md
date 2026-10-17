@@ -29,11 +29,7 @@ A full stack web app to track job applications through each stage: Applied, Inte
 
 ## How to Run the Backend
 
-1. Clone the repo and open the `backend` folder
-2. Create and activate a virtual environment
-3. Install the packages
-4. Run the migrations and start the server
-
+```bash
 cd backend
 python -m venv venv
 venv\Scripts\activate
@@ -41,6 +37,7 @@ pip install django djangorestframework django-cors-headers djangorestframework-s
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
+```
 
 ## Author
 
