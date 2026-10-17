@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from './api'
+import Notes from './Notes'
 
 const EMPTY_FORM = {
   company: '',
@@ -15,6 +16,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState('')
+  const [openId, setOpenId] = useState(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -151,7 +153,7 @@ function Dashboard() {
       )}
 
       {applications.length > 0 && (
-        <table className="table table-striped align-middle">
+        <table className="table align-middle">
           <thead>
             <tr>
               <th>Company</th>
@@ -164,33 +166,50 @@ function Dashboard() {
           </thead>
           <tbody>
             {applications.map((app) => (
-              <tr key={app.id}>
-                <td>{app.company}</td>
-                <td>{app.position}</td>
-                <td>{app.location}</td>
-                <td>
-                  <select
-                    className="form-select form-select-sm"
-                    style={{ width: '140px' }}
-                    value={app.status}
-                    onChange={(e) => handleStatusChange(app.id, e.target.value)}
-                  >
-                    <option value="applied">Applied</option>
-                    <option value="interview">Interview</option>
-                    <option value="offer">Offer</option>
-                    <option value="rejected">Rejected</option>
-                  </select>
-                </td>
-                <td>{app.applied_date}</td>
-                <td>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => handleDelete(app.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
+              <Fragment key={app.id}>
+                <tr>
+                  <td>{app.company}</td>
+                  <td>{app.position}</td>
+                  <td>{app.location}</td>
+                  <td>
+                    <select
+                      className="form-select form-select-sm"
+                      style={{ width: '140px' }}
+                      value={app.status}
+                      onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                    >
+                      <option value="applied">Applied</option>
+                      <option value="interview">Interview</option>
+                      <option value="offer">Offer</option>
+                      <option value="rejected">Rejected</option>
+                    </select>
+                  </td>
+                  <td>{app.applied_date}</td>
+                  <td>
+                    <div className="d-flex gap-2">
+                      <button
+                        className="btn btn-sm btn-outline-secondary"
+                        onClick={() => setOpenId(openId === app.id ? null : app.id)}
+                      >
+                        {openId === app.id ? 'Hide notes' : 'Notes'}
+                      </button>
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => handleDelete(app.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {openId === app.id && (
+                  <tr>
+                    <td colSpan="6">
+                      <Notes applicationId={app.id} />
+                    </td>
+                  </tr>
+                )}
+              </Fragment>
             ))}
           </tbody>
         </table>
