@@ -22,6 +22,11 @@ class JobApplicationViewSet(viewsets.ModelViewSet):
         # Attach the logged-in user automatically
         serializer.save(user=self.request.user)
 
+    def perform_destroy(self, instance):
+        # Also remove this application's notes from MongoDB
+        notes.delete_many({'application_id': instance.id})
+        instance.delete()
+
 
 class ApplicationNotesView(APIView):
     permission_classes = [permissions.IsAuthenticated]
